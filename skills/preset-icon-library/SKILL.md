@@ -99,9 +99,9 @@ For a React project with Lucide:
 npm install lucide-react
 ```
 
-## Centralized Configuration
+## Centralized Configuration with Override Support
 
-Create a configuration file to manage icon sizes and styles in one place:
+Create a configuration file to manage icon sizes and styles in one place, with support for per-icon overrides:
 
 ```ts
 // config/icon.config.ts
@@ -123,7 +123,8 @@ export const IconStrokes = {
 export const IconConfig = {
   defaultSize: IconSizes.md,
   defaultStroke: IconStrokes.normal,
-  // Override sizes by usage context
+  
+  // Default sizes by usage context
   sizes: {
     navigation: IconSizes.md,
     button: IconSizes.sm,
@@ -132,13 +133,45 @@ export const IconConfig = {
     card: IconSizes.md,
     heading: IconSizes.lg,
   },
-  // Override stroke by usage context
+  
+  // Default strokes by usage context
   strokes: {
     primary: IconStrokes.normal,
     secondary: IconStrokes.thin,
     emphasis: IconStrokes.bold,
-  }
+  },
+  
+  // Per-icon overrides (optional)
+  overrides: {
+    // Custom size for specific icons
+    Home: { size: IconSizes.lg },
+    Search: { size: IconSizes.sm },
+    Loader2: { size: IconSizes.lg },
+    // Custom stroke for specific icons
+    AlertCircle: { stroke: IconStrokes.bold },
+    // Custom both size and stroke
+    Check: { size: IconSizes.xs, stroke: IconStrokes.bold },
+  } as Record<string, { size?: number; stroke?: number }>,
 } as const;
+```
+
+Helper function to resolve icon props with override support:
+
+```ts
+// config/icon.config.ts (continued)
+
+type IconName = keyof typeof IconConfig.overrides;
+
+export function getIconProps(name: IconName, contextSize: number, contextStroke: number) {
+  const override = IconConfig.overrides[name];
+  if (!override) {
+    return { size: contextSize, strokeWidth: contextStroke };
+  }
+  return {
+    size: override.size ?? contextSize,
+    strokeWidth: override.stroke ?? contextStroke,
+  };
+}
 ```
 
 Then use in Icons component:
@@ -153,40 +186,105 @@ import {
   Dashboard, Package, Users, CreditCard,
   BarChart3, PieChart, TrendingUp, Calendar
 } from 'lucide-react';
-import { IconConfig } from '@/config/icon.config';
+import { IconConfig, getIconProps } from '@/config/icon.config';
 
 export const Icons = {
-  Home: (props) => <Home size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Dashboard: (props) => <Dashboard size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  User: (props) => <User size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Settings: (props) => <Settings size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Menu: (props) => <Menu size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />,
+  Home: (props) => {
+    const { size, strokeWidth } = getIconProps('Home', IconConfig.sizes.navigation, IconConfig.strokes.primary);
+    return <Home size={size} strokeWidth={strokeWidth} {...props} />;
+  },
+  Dashboard: (props) => (
+    <Dashboard size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  User: (props) => (
+    <User size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Settings: (props) => (
+    <Settings size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Menu: (props) => (
+    <Menu size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
   
-  Search: (props) => <Search size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Bell: (props) => <Bell size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Plus: (props) => <Plus size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
+  Search: (props) => {
+    const { size, strokeWidth } = getIconProps('Search', IconConfig.sizes.navigation, IconConfig.strokes.primary);
+    return <Search size={size} strokeWidth={strokeWidth} {...props} />;
+  },
+  Bell: (props) => (
+    <Bell size={IconConfig.sizes.navigation} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Plus: (props) => (
+    <Plus size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
   
-  Edit: (props) => <Edit size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Trash: (props) => <Trash size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Save: (props) => <Save size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Check: (props) => <Check size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Eye: (props) => <Eye size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />,
+  Edit: (props) => (
+    <Edit size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Trash: (props) => (
+    <Trash size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Save: (props) => (
+    <Save size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Check: (props) => {
+    const { size, strokeWidth } = getIconProps('Check', IconConfig.sizes.button, IconConfig.strokes.primary);
+    return <Check size={size} strokeWidth={strokeWidth} {...props} />;
+  },
+  Eye: (props) => (
+    <Eye size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
   
-  ChevronDown: (props) => <ChevronDown size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  ChevronRight: (props) => <ChevronRight size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />,
+  ChevronDown: (props) => (
+    <ChevronDown size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  ChevronRight: (props) => (
+    <ChevronRight size={IconConfig.sizes.button} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
   
-  AlertCircle: (props) => <AlertCircle size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Info: (props) => <Info size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Loader2: (props) => <Loader2 size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
+  AlertCircle: (props) => {
+    const { size, strokeWidth } = getIconProps('AlertCircle', IconConfig.sizes.card, IconConfig.strokes.primary);
+    return <AlertCircle size={size} strokeWidth={strokeWidth} {...props} />;
+  },
+  Info: (props) => (
+    <Info size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Loader2: (props) => {
+    const { size, strokeWidth } = getIconProps('Loader2', IconConfig.sizes.card, IconConfig.strokes.primary);
+    return <Loader2 size={size} strokeWidth={strokeWidth} {...props} />;
+  },
   
-  Package: (props) => <Package size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Users: (props) => <Users size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  CreditCard: (props) => <CreditCard size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  BarChart3: (props) => <BarChart3 size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  PieChart: (props) => <PieChart size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  TrendingUp: (props) => <TrendingUp size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
-  Calendar: (props) => <Calendar size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />,
+  Package: (props) => (
+    <Package size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Users: (props) => (
+    <Users size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  CreditCard: (props) => (
+    <CreditCard size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  BarChart3: (props) => (
+    <BarChart3 size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  PieChart: (props) => (
+    <PieChart size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  TrendingUp: (props) => (
+    <TrendingUp size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+  Calendar: (props) => (
+    <Calendar size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
 };
+```
+
+Override usage: Add entries in `IconConfig.overrides` to customize specific icons:
+
+```ts
+overrides: {
+  Home: { size: IconSizes.lg },      // Custom size only
+  AlertCircle: { stroke: IconStrokes.bold },  // Custom stroke only
+  Check: { size: IconSizes.xs, stroke: IconStrokes.bold },  // Custom both
+}
 ```
 
 All icons configured with consistent size and stroke
