@@ -14,9 +14,9 @@ arguments:
 
 ## Core Rules
 
-1. **Single Icon Library** - One library per project, never mix
-2. **Business Scenario Based** - Match icon style to project type
-3. **Consistent Sizing** - Same size and stroke width across all icons
+1. **Business Scenario Based** - Match icon style to project type
+2. **Consistent Sizing** - Same size and stroke width across all icons
+3. **Add New Libraries When Needed** - If existing library lacks needed icons, add a style-compatible library
 
 ## Workflow
 
@@ -30,7 +30,7 @@ arguments:
 
 1. Check `package.json` for existing icon library
 2. If exists: find similar icon in same library
-3. If not: install style-compatible library, use closest match
+3. If not found: install a style-compatible library, use closest match
 4. Add to Icons component, never use emoji as fallback
 
 ### Icon Library Selection
@@ -82,7 +82,6 @@ export const Icons = {
 
 ## Notes
 
-- Never mix icon libraries in one project
 - Use centralized config for consistent sizing
-- If project has existing icon library, continue using it
+- Add new style-compatible icon library when needed
 - **Never use emojis in UI examples - always use the icon library instead**
