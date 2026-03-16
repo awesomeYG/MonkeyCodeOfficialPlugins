@@ -332,10 +332,10 @@
       "is_enabled": true
     },
     {
-      "skill_id": "preset-icon-library",
+      "skill_id": "icon-library-manager",
       "name": {
-        "en": "Preset Icon Library",
-        "zh": "预设图标库"
+        "en": "Icon Library Manager",
+        "zh": "图标库管理"
       },
       "description": {
         "en": "Automatically manage icon libraries. Use when: 1) any icon is needed in UI, 2) AI wants to use emoji instead of icon.",
@@ -343,7 +343,7 @@
       },
       "categories": ["frontend", "icons", "design-systems"],
       "tags": ["前端", "图标", "UI"],
-      "skill_md_path": "preset-icon-library/SKILL.md",
+      "skill_md_path": "icon-library-manager/SKILL.md",
       "is_enabled": true
     }
   ]
