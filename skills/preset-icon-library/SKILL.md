@@ -1,6 +1,6 @@
 ---
 name: preset-icon-library
-description: Automatically manage icon libraries - install when creating projects, add missing icons when editing. Never use emojis.
+description: Automatically manage icon libraries - install when creating projects, add missing icons when editing. Avoid using emojis.
 arguments:
   - name: projectPath
     description: Absolute path to the frontend project directory
@@ -84,4 +84,4 @@ export const Icons = {
 
 - Use centralized config for consistent sizing
 - Add new style-compatible icon library when needed
-- **Never use emojis in UI examples - always use the icon library instead**
+- **Avoid using emojis in UI examples - always use the icon library instead**
