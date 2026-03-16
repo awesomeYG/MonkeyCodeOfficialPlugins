@@ -1,6 +1,6 @@
 ---
 name: preset-icon-library
-description: When creating a new frontend project, analyze the product description and automatically install and configure a suitable icon library to avoid using emojis in the UI.
+description: Automatically manage icon libraries for frontend projects - install when creating new projects, and add missing icons when editing existing projects without emojis.
 arguments:
   - name: projectPath
     description: Absolute path to the frontend project directory
@@ -8,11 +8,16 @@ arguments:
   - name: productDescription
     description: Brief description of the product/app type to help select the appropriate icon library
     required: false
+  - name: iconName
+    description: Name of the icon needed (e.g., "user", "settings", "shopping-cart")
+    required: false
 ---
 
 # Preset Icon Library
 
-When creating a new frontend project, automatically select and configure an appropriate icon library based on the product description.
+Automatically manage icon libraries for frontend projects:
+1. **When creating new projects** - Analyze business scenario and install suitable icon library
+2. **When editing existing projects** - Find or add missing icons without using emojis
 
 ## Core Rules (MUST FOLLOW)
 
@@ -31,6 +36,72 @@ When creating a new frontend project, automatically select and configure an appr
    - Same size (e.g., 20px or 24px standard)
    - Same stroke width/line weight (e.g., 1.5px or 2px)
    - Same style (outline vs solid vs duotone)
+
+## Workflow
+
+### Scenario 1: Creating New Project
+
+1. **Analyze the business scenario** from product description to determine the best icon library and style
+2. **Detect the frontend framework** to determine the correct installation method
+3. **Install the icon library** using the appropriate package manager
+4. **Create icon configuration** with consistent size and stroke settings
+5. **Provide usage guidelines** ensuring all icons follow the same standards
+
+### Scenario 2: Adding Missing Icons to Existing Project
+
+When editing code and needing an icon that doesn't exist in the project:
+
+1. **Check existing icon library** - Look at `package.json` to see if any icon library is already installed
+
+2. **If icon library exists**:
+   - Search the installed library for a similar icon name
+   - If found, use that icon
+   - If not found, find an alternative icon with similar meaning from the same library
+
+3. **If no icon library installed**:
+   - Analyze project style (check UI framework, design tokens, existing components)
+   - Install appropriate icon library based on project style
+   - Select the closest matching icon from the new library
+
+4. **Add icon to centralized Icons component**:
+   - Import the new icon
+   - Add to Icons.tsx with consistent size/stroke configuration
+
+5. **Never use emoji as fallback** - Always find a suitable icon from the library
+
+#### Icon Search Priority
+
+| Priority | Action |
+|----------|--------|
+| 1 | Same icon name in installed library |
+| 2 | Semantic alternative in same library |
+| 3 | Icon from style-compatible library (if no library installed) |
+| 4 | Create simple SVG inline (only if absolutely necessary) |
+
+#### Example: Adding Missing Icon
+
+```bash
+# Scenario: Project uses Lucide, need "analytics" icon but only "chart" exists
+
+# Step 1: Check installed library
+grep "lucide" package.json
+# Found: "lucide-react": "^0.300.0"
+
+# Step 2: Search for similar icon in Lucide
+# - BarChart3, PieChart, TrendingUp, Activity
+# - Use "Activity" for analytics/metrics concept
+
+# Step 3: Add to Icons.tsx
+import { Activity } from 'lucide-react';
+
+// Add to Icons object with consistent styling
+export const Icons = {
+  // ... existing icons
+  Activity: (props) => (
+    <Activity size={IconConfig.sizes.card} strokeWidth={IconConfig.strokes.primary} {...props} />
+  ),
+};
+```
 
 ## Icon Library Options
 
