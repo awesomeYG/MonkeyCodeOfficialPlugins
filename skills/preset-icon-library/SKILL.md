@@ -14,141 +14,156 @@ arguments:
 
 When creating a new frontend project, automatically select and configure an appropriate icon library based on the product description.
 
+## Core Rules (MUST FOLLOW)
+
+1. **Single Icon Library Per Project** - Only ONE icon library allowed in a project. Never mix multiple icon libraries.
+
+2. **Business Scenario Based Selection** - Icon style must match the business scenario:
+   - Dashboard/Admin: Professional, clean, data-oriented
+   - E-commerce: Clear, commerce-focused, trustworthy
+   - Social/Community: Friendly, approachable, warm
+   - Finance/Banking: Professional, serious, trustworthy
+   - Healthcare: Clean, medical-standard, empathetic
+   - Education: Modern, accessible, encouraging
+   - Creative/Design: Unique, artistic, distinctive
+
+3. **Consistent Icon Properties** - All icons must maintain:
+   - Same size (e.g., 20px or 24px standard)
+   - Same stroke width/line weight (e.g., 1.5px or 2px)
+   - Same style (outline vs solid vs duotone)
+
 ## Icon Library Options
 
-Based on the product type, select the most suitable icon library:
+Based on the business scenario, select the most suitable icon library:
 
-| Product Type | Recommended Library | Reason |
-|--------------|---------------------|--------|
-| Dashboard / Admin / SaaS | Lucide | Clean, modern, professional look |
-| E-commerce / Shopping | Lucide or Heroicons | Clear, recognizable commerce icons |
-| Social / Community | Heroicons or Tabler | Friendly, approachable design |
-| Finance / Banking | Lucide | Professional, trustworthy appearance |
-| Healthcare / Medical | Lucide or Phosphor | Clean, medical-standard icons |
-| Education / Learning | Lucide or Remix | Modern, accessible icons |
-| General / Multi-purpose | Lucide | Most popular, versatile choice |
-| Mobile App | Heroicons or Ionicons | Touch-friendly, clear at small sizes |
-| Dashboard with data viz | Lucide | Great for charts and data UI |
-| Creative / Design | Phosphor or Feather | Unique, artistic style |
+| Business Scenario | Recommended Library | Style | Size | Stroke |
+|-------------------|---------------------|-------|------|--------|
+| Dashboard / Admin / SaaS | Lucide | Outline | 20px | 1.5px |
+| E-commerce / Shopping | Lucide | Outline/Solid | 20px | 1.5px |
+| Social / Community | Heroicons | Outline | 20px | 1.5px |
+| Finance / Banking | Lucide | Outline | 20px | 2px |
+| Healthcare / Medical | Lucide | Outline | 20px | 1.5px |
+| Education / Learning | Lucide | Outline | 20px | 1.5px |
+| General / Multi-purpose | Lucide | Outline | 20px | 1.5px |
+| Mobile App | Heroicons | Solid/Outline | 24px | 1.5px |
+| Dashboard with data viz | Lucide | Outline | 16px/20px | 1.5px |
+| Creative / Design | Phosphor | Duotone | 24px | 1.5px |
 
 ### Popular Icon Libraries Reference
 
-- **Lucide** - https://lucide.dev (Most popular, 1500+ icons, MIT license)
+- **Lucide** - https://lucide.dev (1500+ icons, MIT license)
 - **Heroicons** - https://heroicons.com (By Tailwind CSS team, MIT license)
 - **Tabler Icons** - https://tabler-icons.io (1500+ icons, MIT license)
 - **Phosphor Icons** - https://phosphoricons.com (700+ icons, MIT license)
-- **Feather Icons** - https://feathericons.com (280+ icons, MIT license)
-- **Ionicons** - https://ionic.io/ionicons (1300+ icons, MIT license)
-- **Remix Icon** - https://remixicon.com (2000+ icons, Apache 2.0)
 
 ## Workflow
 
-1. **Analyze the product description** (if provided) to determine the best icon library
+1. **Analyze the business scenario** from product description to determine the best icon library and style
 
-2. **Detect the frontend framework** to determine the correct installation method:
+2. **Check existing icon usage** - If the project already has an icon library installed, continue using it instead of adding a new one
 
-   - **React** - Check for `package.json` with React dependencies
-   - **Vue** - Check for `package.json` with Vue dependencies or `.vue` files
-   - **Next.js** - Check for `package.json` with Next.js
-   - **Nuxt** - Check for `nuxt.config.ts` or `.nuxt` directory
-   - **Svelte** - Check for `package.json` with Svelte or `.svelte` files
-   - **Astro** - Check for `astro.config.mjs`
-   - **Plain HTML/JS** - Use CDN or npm package
+3. **Detect the frontend framework** to determine the correct installation method
 
-3. **Install the icon library** using the appropriate package manager:
+4. **Install the icon library** using the appropriate package manager
 
-   ```bash
-   # For React/Vue/Next.js projects
-   npm install lucide-react   # Lucide for React
-   npm install lucide-vue-next # Lucide for Vue
-   npm install @heroicons/react  # Heroicons for React
-   npm install @heroicons/vue    # Heroicons for Vue
-   npm install @tabler/icons    # Tabler Icons
-   npm install @phosphor-icons/react  # Phosphor for React
-   
-   # Or use the generic package
-   npm install lucide
-   ```
+5. **Create icon configuration** with consistent size and stroke settings
 
-4. **Configure the icon library** if needed (some frameworks require setup)
+6. **Provide usage guidelines** ensuring all icons follow the same standards
 
-5. **Provide usage examples** to the user
+## Icon Configuration Standards
 
-## Detection and Installation Examples
+### Size Standards
 
-### React Project
+| Usage Context | Recommended Size |
+|--------------|------------------|
+| Navigation menu | 20px |
+| Buttons | 16px or 20px |
+| Form inputs | 16px |
+| Data tables | 16px |
+| Cards/Widgets | 20px |
+| Headers/Page titles | 24px |
 
-```bash
-# Check if React project
-if grep -q '"react"' package.json; then
-    # Install Lucide (recommended default)
-    npm install lucide-react
-    
-    # Or Heroicons
-    npm install @heroicons/react
-fi
-```
+### Stroke Width Standards
 
-### Vue Project
+| Style | Recommended Stroke |
+|-------|-------------------|
+| Standard outline | 1.5px |
+| Heavy/Emphasis | 2px |
+| Subtle/Secondary | 1px |
+
+### Implementation Example
+
+For a React project with Lucide:
 
 ```bash
-# Check if Vue project  
-if grep -q '"vue"' package.json; then
-    npm install lucide-vue-next
-    # or
-    npm install @heroicons/vue
-fi
-```
-
-### Next.js Project
-
-```bash
-# Next.js with Lucide
 npm install lucide-react
+```
 
-# Create a icon component for convenience
-cat > components/Icons.tsx << 'EOF'
+Create a centralized icon configuration:
+
+```tsx
+// components/Icons.tsx
 import { 
   Home, User, Settings, Search, Bell, 
   Menu, X, ChevronDown, ChevronRight,
-  Plus, Edit, Trash, Save, Check, X as XIcon,
-  Loader2, AlertCircle, Info
+  Plus, Edit, Trash, Save, Check,
+  Loader2, AlertCircle, Info, Eye,
+  Dashboard, Package, Users, CreditCard,
+  BarChart3, PieChart, TrendingUp, Calendar
 } from 'lucide-react';
 
+// All icons configured with consistent size and stroke
 export const Icons = {
-  Home, User, Settings, Search, Bell,
-  Menu, X, ChevronDown, ChevronRight,
-  Plus, Edit, Trash, Save, Check, XIcon,
-  Loader2, AlertCircle, Info
+  // Navigation
+  Home: (props) => <Home size={20} strokeWidth={1.5} {...props} />,
+  Dashboard: (props) => <Dashboard size={20} strokeWidth={1.5} {...props} />,
+  User: (props) => <User size={20} strokeWidth={1.5} {...props} />,
+  Settings: (props) => <Settings size={20} strokeWidth={1.5} {...props} />,
+  Menu: (props) => <Menu size={20} strokeWidth={1.5} {...props} />,
+  
+  // Actions
+  Search: (props) => <Search size={20} strokeWidth={1.5} {...props} />,
+  Bell: (props) => <Bell size={20} strokeWidth={1.5} {...props} />,
+  Plus: (props) => <Plus size={20} strokeWidth={1.5} {...props} />,
+  Edit: (props) => <Edit size={16} strokeWidth={1.5} {...props} />,
+  Trash: (props) => <Trash size={16} strokeWidth={1.5} {...props} />,
+  Save: (props) => <Save size={16} strokeWidth={1.5} {...props} />,
+  Check: (props) => <Check size={16} strokeWidth={1.5} {...props} />,
+  Eye: (props) => <Eye size={16} strokeWidth={1.5} {...props} />,
+  
+  // Navigation arrows
+  ChevronDown: (props) => <ChevronDown size={16} strokeWidth={1.5} {...props} />,
+  ChevronRight: (props) => <ChevronRight size={16} strokeWidth={1.5} {...props} />,
+  
+  // Status
+  AlertCircle: (props) => <AlertCircle size={20} strokeWidth={1.5} {...props} />,
+  Info: (props) => <Info size={20} strokeWidth={1.5} {...props} />,
+  Loader2: (props) => <Loader2 size={20} strokeWidth={1.5} {...props} />,
+  
+  // Business-specific
+  Package: (props) => <Package size={20} strokeWidth={1.5} {...props} />,
+  Users: (props) => <Users size={20} strokeWidth={1.5} {...props} />,
+  CreditCard: (props) => <CreditCard size={20} strokeWidth={1.5} {...props} />,
+  BarChart3: (props) => <BarChart3 size={20} strokeWidth={1.5} {...props} />,
+  PieChart: (props) => <PieChart size={20} strokeWidth={1.5} {...props} />,
+  TrendingUp: (props) => <TrendingUp size={20} strokeWidth={1.5} {...props} />,
+  Calendar: (props) => <Calendar size={20} strokeWidth={1.5} {...props} />,
 };
-EOF
-```
-
-### Plain HTML/JS Project
-
-For non-framework projects, use CDN:
-
-```html
-<!-- Lucide CDN -->
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
-<!-- Or Heroicons -->
-<script src="https://unpkg.com/@heroicons/react/24/outline/index.js"></script>
 ```
 
 ## Output
 
 After installing, provide the user with:
 
-1. **Which icon library was selected** and why
-2. **Installation commands used**
-3. **Usage examples** for the specific framework
-4. **Next steps** if additional configuration is needed
+1. **Selected icon library** and business scenario rationale
+2. **Standard icon configuration** (size, stroke width)
+3. **Centralized icon component** for consistent usage
+4. **Usage guidelines** - enforce single library and consistent styling
 
 ## Notes
 
-- If no product description is provided, default to **Lucide** (most popular, versatile)
-- Consider the project's design system - if using Tailwind CSS, Heroicons or Lucide are natural fits
-- For projects requiring many icons (e.g., admin dashboards), Lucide or Tabler are best
-- For creative/marketing sites, Phosphor offers a unique style
-- Always use the latest version with `latest` tag or check compatible versions
+- NEVER allow mixing multiple icon libraries in one project
+- ALWAYS enforce consistent icon size and stroke width across all components
+- If existing project has an icon library, continue using it rather than introducing new ones
+- Default to Lucide for most business scenarios unless specifically justified
+- Document the chosen icon library and standards in project README
