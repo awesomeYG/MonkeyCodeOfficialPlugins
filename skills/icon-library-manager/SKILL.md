@@ -1,6 +1,6 @@
 ---
 name: icon-library-manager
-description: "自动管理图标库 - 创建项目时安装图标库，编辑时添加缺失图标。触发时机：1) UI 需要图标/icon/小图标/品牌标识/按钮前加图标/列表项带图标时；2) AI 想用或输出 emoji 时（必须提醒并用图标替代）。"
+description: "自动管理图标库 - 创建项目时安装图标库，编辑时添加缺失图标。"
 arguments:
   - name: projectPath
     description: 前端项目根目录的绝对路径
@@ -12,6 +12,9 @@ arguments:
     description: 偏好的风格 (Outline/Filled/Thin/Sharp)
     default: "Outline"
 ---
+
+# 什么时候用
+1) UI 需要图标/icon/小图标/品牌标识/按钮前加图标/列表项带图标时；2) AI 想用或输出 emoji 时（必须提醒并用图标替代）。
 
 # 核心能力与工作流
 
