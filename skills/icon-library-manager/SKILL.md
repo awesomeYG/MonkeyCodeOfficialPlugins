@@ -1,87 +1,48 @@
 ---
 name: icon-library-manager
-description: "自动管理图标库 - 创建项目时安装图标库，编辑时添加缺失图标。触发时机：1) UI 需要图标时，2) AI 想用 emoji 时。"
+description: "智能图标库管家：负责前端项目图标库的选型、安装及标准化引用。核心任务：消除 UI 中的 emoji，确保图标风格统一。"
 arguments:
   - name: projectPath
-    description: 前端项目目录的绝对路径
+    description: 前端项目根目录的绝对路径
     required: true
-  - name: productDescription
-    description: 产品/应用的简要描述
+  - name: framework
+    description: 识别项目框架 (React/Vue/Next.js/Vite)
     required: false
+  - name: iconStyle
+    description: 偏好的风格 (Outline/Filled/Thin/Sharp)
+    default: "Outline"
 ---
 
-# 预设图标库
+# 核心能力与工作流
 
-## 核心规则
+## 1. 智能选型策略 (Selection Logic)
+当接收到 `productDescription` 时，按以下优先级选择：
+- **企业级/B端/通用**: Lucide (首选，属性最全，支持 Tree-shaking)。
+- **精细/多风格 (Thin/Bold)**: Phosphor Icons。
+- **极简/高质感**: Heroicons (配合 Tailwind CSS)。
+- **高密度/工具类**: Tabler Icons。
+- **国内/特定业务**: Remix Icon。
 
-1. **基于业务场景** - 根据项目类型选择合适的图标风格
-2. **统一尺寸** - 所有图标保持相同的尺寸和线宽
-3. **按需添加新库** - 当现有库缺少所需图标时，添加风格兼容的图标库
+## 2. 自动化执行步骤
+### 场景 A：初始化项目
+1. **环境侦测**：检查 `package.json` 确定包管理器 (pnpm > yarn > npm) 和框架。
+2. **静默安装**：执行安装命令 (例如 `pnpm add lucide-react`)。
+3. **配置基建**：在 `src/components/shared/` 或 `src/lib/` 自动生成 `icon-registry.tsx`。
 
-## 工作流程
+### 场景 B：UI 迭代（添加缺失图标）
+1. **语义对齐**：当 AI 意图使用 Emoji（如 ⚙️）或 描述（如 "设置"）时，搜索已安装库中语义最接近的图标（如 `Settings`）。
+2. **冲突检查**：优先使用现有库。若风格差异过大，才考虑引入第二个库。
+3. **按需导出**：将新图标追加到全局图标组件库中。
 
-### 创建新项目
+## 3. 代码生成标准
+- **禁用 Emoji**：严禁在 UI 渲染逻辑中硬编码 Emoji。
+- **统一导出规范**：
+  ```tsx
+  // 推荐：集中管理，方便全局替换尺寸和线宽
+  import { LucideProps, Settings, User, Bell } from 'lucide-react';
 
-1. 分析业务场景 → 选择合适的图标库
-2. 检测前端框架 → 通过 npm/yarn/pnpm 安装
-3. 创建集中化图标配置，保持一致的尺寸和线宽
-
-### 添加缺失图标
-
-1. 检查 `package.json` 中已安装的图标库
-2. 已有图标库：在同库中查找相似图标
-3. 未找到：在风格兼容的库中安装，使用最匹配的图标
-4. 添加到 Icons 组件，避免使用 emoji 作为备选
-
-### 图标库选择
-
-| 场景 | 推荐 |
-|------|------|
-| Dashboard / Admin | Tabler Icons, Lucide |
-| 电商 | Lucide, Heroicons |
-| 社交 / 社区 | Heroicons |
-| 金融 / 银行 | Lucide |
-| 医疗健康 | Lucide, Phosphor |
-| 移动应用 | Heroicons, Ionicons |
-| 创意 / 设计 | Phosphor |
-| 国内产品 | iconfont, Remix Icon |
-| 通用 / 默认 | Lucide |
-
-### 常用图标库
-
-- **Lucide** - https://lucide.dev (1500+，现代风格，MIT)
-- **Tabler Icons** - https://tabler-icons.io (5000+，MIT)
-- **Heroicons** - https://heroicons.com (300+，Tailwind 官方，MIT)
-- **Phosphor** - https://phosphoricons.com (700+，高端风格，MIT)
-- **iconfont** - https://www.iconfont.cn (10000+，阿里巴巴)
-- **Remix Icon** - https://remixicon.com (2000+，MIT)
-
-## 图标配置
-
-创建 `config/icon.config.ts`：
-
-```ts
-export const IconConfig = {
-  defaultSize: 20,
-  defaultStroke: 1.5,
-  sizes: { navigation: 20, button: 16, card: 20, heading: 24 },
-  strokes: { primary: 1.5, emphasis: 2 },
-} as const;
-```
-
-在图标组件中使用：
-
-```tsx
-import { SomeIcon } from 'lucide-react';
-import { IconConfig } from '@/config/icon.config';
-
-export const Icons = {
-  SomeIcon: (props) => <SomeIcon size={IconConfig.sizes.card} strokeWidth={IconConfig.defaultStroke} {...props} />,
-};
-```
-
-## 注意事项
-
-- 使用集中化配置保持尺寸一致
-- 根据需要添加风格兼容的新图标库
-- **避免在 UI 示例中使用 emoji，尽量使用图标库中的图标**
+  export const Icon = {
+    Settings: (props: LucideProps) => <Settings size={20} strokeWidth={1.5} {...props} />,
+    User: (props: LucideProps) => <User size={20} strokeWidth={1.5} {...props} />,
+  };
+  ```
