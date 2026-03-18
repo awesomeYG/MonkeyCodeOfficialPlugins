@@ -338,11 +338,11 @@
         "zh": "图标库管理"
       },
       "description": {
-        "en": "Automatically manage icon libraries through better-icons. Use when: 1) any icon is needed in UI, 2) AI wants to use emoji (must intercept and replace with icons), 3) data display pages need icons for visual enhancement.",
-        "zh": "通过 better-icons 工具拦截 Emoji 并同步专业图标到项目。触发时机：1) UI 需要图标时，2) AI 想用 emoji 时（必须拦截替换为图标），3) 数据展示页面需要图标增强视觉效果时。"
+        "en": "Automates icon sourcing with better-icons: intercepts emoji usage, recommends icon sets during project initialization, and runs search/get/sync flows to keep dashboards or UI iterations consistent withOutline/Filled style preferences.",
+        "zh": "通过 better-icons 自动管理图标：拦截 Emoji 并以专业图标替换，在创建前端项目时推荐并初始化图标集，UI/数据展示迭代阶段执行搜索/获取/同步流程并遵循 Outline/Filled 等风格偏好。"
       },
       "categories": ["frontend", "icons", "design-systems"],
-      "tags": ["前端", "图标", "UI"],
+      "tags": ["前端", "图标", "UI", "Emoji"],
       "skill_md_path": "icon-library-manager/SKILL.md",
       "is_enabled": true
     }
